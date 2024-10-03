@@ -24,8 +24,20 @@ const MetadataComparator = (props: any) => {
 		setTargetSnapshot(e.target.value);
 	}
 	const handleGetDiff = async () => {
-		console.log(baseSnapshot);
-		const result = (await axios.post('http://localhost:3000/compare-snapshots', { body: { baseSnapshot:baseSnapshot, targetSnapshot:targetSnapshot } })).data.explanation;
+		const data = JSON.stringify({
+			"baseSnapshot": baseSnapshot,
+			"targetSnapshot": targetSnapshot
+		});
+		const config = {
+			method: 'post',
+			maxBodyLength: Infinity,
+			url: 'http://localhost:3000/compare-snapshots',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			data: data
+		};
+		const result = (await axios.request(config)).data.explanation;
 		// const result = 'Still trying';
 		setDiff(result);
 	}
