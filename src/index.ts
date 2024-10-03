@@ -13,17 +13,14 @@ app.post('/compare-snapshots', async (req: Request, res: Response): Promise<any>
     }
 
     try {
-        // Retrieve the OpenAI API key from environment variables
         const openaiApiKey = process.env.OPENAI_API_KEY;
 
         if (!openaiApiKey) {
             return res.status(500).send({ error: 'OpenAI API key is not configured.' });
         }
 
-        // Call the helper function to get the comparison result from OpenAI
         const comparisonResult = await compareSnapshotsWithOpenAI(baseSnapshot, targetSnapshot, openaiApiKey);
 
-        // Store the comparison result in the database (optional, for training)
         return res.json({ explanation: comparisonResult });
     } catch (error) {
         console.error('Error comparing snapshots with OpenAI:', error);
@@ -39,17 +36,14 @@ app.post('/compare-git-diff', async (req: Request, res: Response): Promise<any> 
     }
 
     try {
-        // Retrieve the OpenAI API key from environment variables
         const openaiApiKey = process.env.OPENAI_API_KEY;
 
         if (!openaiApiKey) {
             return res.status(500).send({ error: 'OpenAI API key is not configured.' });
         }
 
-        // Call the helper function to get the comparison result from OpenAI
         const comparisonResult = await gitDifferenceWithOpenAI(gitDifference, openaiApiKey);
 
-        // Store the comparison result in the database (optional, for training)
         return res.json({ explanation: comparisonResult });
     } catch (error) {
         console.error('Error comparing snapshots with OpenAI:', error);
@@ -57,7 +51,7 @@ app.post('/compare-git-diff', async (req: Request, res: Response): Promise<any> 
     }
 });
 
-const PORT = 3000; // You can set any number here
+const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
