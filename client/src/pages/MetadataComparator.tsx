@@ -1,27 +1,48 @@
-import { Button, FormControl, Grid, Grid2, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { Button, Container, FormControl, Grid2, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
+import axios from "axios";
+import React from "react";
 import { useState } from "react";
 
 const MetadataComparator = (props: any) => {
-	const [oldFile, setOldFile] = useState('');
-	const [newFile, setNewFile] = useState('');
+	const [baseSnapshot, setBaseSnapshot] = useState('');
+	const [targetSnapshot, setTargetSnapshot] = useState('');
+	const [diff, setDiff] = useState('');
+	const ref = React.useRef<HTMLInputElement>(null);
 
-	const handleOldFileSelect = (e:SelectChangeEvent) => {
-		setOldFile(e.target.value);
+	React.useEffect(() => {
+		if (ref.current !== null) {
+			ref.current.setAttribute("directory", "");
+			ref.current.setAttribute("webkitdirectory", "");
+		}
+	}, [ref]);
+
+
+	const handleOldFileSelect = (e: SelectChangeEvent) => {
+		setBaseSnapshot(e.target.value);
 	}
-	const handleNewFileSelect = (e:SelectChangeEvent) => {
-		setNewFile(e.target.value);
+	const handleNewFileSelect = (e: SelectChangeEvent) => {
+		setTargetSnapshot(e.target.value);
+	}
+	const handleGetDiff = async () => {
+		console.log(baseSnapshot);
+		const result = (await axios.post('http://localhost:3000/compare-snapshots', { body: { baseSnapshot:baseSnapshot, targetSnapshot:targetSnapshot } })).data.explanation;
+		// const result = 'Still trying';
+		setDiff(result);
+	}
+	const handleInput = (e: any) => {
+		console.log(e);
+		console.log(e.target.value);
 	}
 
 	return <>
 		<h1>Metadata comparator</h1>
-		{/* <Button
+		<Button
 			variant="contained"
 			component="label"
-			// onClick={handleInput}
 		>
 			Upload files
-			<input id='upload' type="file" hidden />
-		</Button> */}
+			<input onChange={handleInput} ref={ref} id='upload' type="file" multiple hidden />
+		</Button>
 		<Grid2 container spacing={2} justifyContent={'center'}>
 			<Grid2 size={8}>
 				<FormControl fullWidth>
@@ -54,8 +75,23 @@ const MetadataComparator = (props: any) => {
 			</Grid2>
 		</Grid2>
 
-		<Button></Button>
+		<Grid2 padding='4'>
+			<Button onClick={handleGetDiff}>Get Difference</Button>
+		</Grid2>
 
+		<Container maxWidth='sm'>
+			<TextField
+				fullWidth
+				placeholder="Cooking some response..."
+				value={diff}
+				multiline
+				slotProps={{
+					input: {
+						readOnly: true,
+					},
+				}}
+			/>
+		</Container>
 	</>
 };
 
