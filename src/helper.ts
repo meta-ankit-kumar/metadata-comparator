@@ -6,10 +6,10 @@ export async function compareSnapshotsWithOpenAI(baseSnapshot: string, targetSna
     const prompt = `Compare the following two JSON snapshots and explain the differences in a human-readable way:
 
     Base Snapshot:
-    ${baseSnapshot}
+    ${JSON.stringify(baseSnapshot)}
 
     Target Snapshot:
-    ${targetSnapshot}
+    ${JSON.stringify(targetSnapshot)}
 
     Provide a concise explanation of the changes.`;
 
