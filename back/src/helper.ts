@@ -40,18 +40,18 @@ export async function gitDifferenceWithOpenAI(gitDifference: string, openaiApiKe
   
     const url = 'https://api.openai.com/v1/chat/completions';
 
-    const prompt = `Assume that you have a great working experience on the salesforce technology.
-    I'm going to provide you the git diff between two folders. The folders on which this difference is calculated represents salesforce organization metadata. 
-    Your task is to understand the file structure and analyse the changes. The idea is to let customer know that if you apply the changes on your Salesforce organization following things are going to be changed.
-    Keep in mind you need to only mention what is changed and how it may impact. Don't explain anything else.
+    const prompt = `Assume you have extensive experience with Salesforce technology and a deep understanding of its metadata structure.
+      I will provide a Git diff output that compares the metadata between two snapshots of a Salesforce organization. Your task is to:
 
-    Git Difference:
-    ${gitDifference}`;
+      1. Analyze the changes in the file structure and metadata.
+      2. Summarize only the differences, describing what has changed and its potential impact on the Salesforce organization. Avoid adding extra explanations or unrelated details.
+      3.Ensure that your response covers all the changes fully, even if the diff is large—do not truncate the output.
+      Here is the Git diff: ${gitDifference}`;
 
     const data = {
         model: 'gpt-4o-mini',
         messages: [{ role: 'user', content: prompt }],
-        max_tokens: 500,
+        max_tokens: 6000,
         temperature: 0.7,
     };
 
