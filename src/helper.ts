@@ -36,14 +36,17 @@ export async function compareSnapshotsWithOpenAI(baseSnapshot: string, targetSna
 }
 
 export async function gitDifferenceWithOpenAI(gitDifference: string, openaiApiKey: string) {
+  console.log('In gitDifferenceWithOpenAI');
+  
     const url = 'https://api.openai.com/v1/chat/completions';
 
-    const prompt = `Compare the following the git difference for salesforce org in a human-readable way:
+    const prompt = `Assume that you have a great working experience on the salesforce technology.
+    I'm going to provide you the git diff between two folders. The folders on which this difference is calculated represents salesforce organization metadata. 
+    Your task is to understand the file structure and analyse the changes. The idea is to let customer know that if you apply the changes on your Salesforce organization following things are going to be changed.
+    Keep in mind you need to only mention what is changed and how it may impact. Don't explain anything else.
 
     Git Difference:
-    ${JSON.stringify(gitDifference)}
-
-    Provide a concise explanation of the changes.`;
+    ${gitDifference}`;
 
     const data = {
         model: 'gpt-4o-mini',
@@ -62,7 +65,7 @@ export async function gitDifferenceWithOpenAI(gitDifference: string, openaiApiKe
 
         return response.data.choices[0].message.content;
     } catch (error) {
-        console.error('Error comparing snapshots with OpenAI:', error);
+        console.error('Response generation failed', error);
         throw error;
     }
 }
