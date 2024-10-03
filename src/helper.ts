@@ -6,10 +6,10 @@ export async function compareSnapshotsWithOpenAI(baseSnapshot: string, targetSna
     const prompt = `Compare the following two JSON snapshots and explain the differences in a human-readable way:
 
     Base Snapshot:
-    ${baseSnapshot}
+    ${JSON.stringify(baseSnapshot)}
 
     Target Snapshot:
-    ${targetSnapshot}
+    ${JSON.stringify(targetSnapshot)}
 
     Provide a concise explanation of the changes.`;
 
@@ -41,7 +41,7 @@ export async function gitDifferenceWithOpenAI(gitDifference: string, openaiApiKe
     const prompt = `Compare the following the git difference for salesforce org in a human-readable way:
 
     Git Difference:
-    ${gitDifference}
+    ${JSON.stringify(gitDifference)}
 
     Provide a concise explanation of the changes.`;
 
