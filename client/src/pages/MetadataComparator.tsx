@@ -25,36 +25,34 @@ const MetadataComparator = (props: any) => {
 	}
 	const handleGetDiff = async () => {
 		const data = JSON.stringify({
-			"baseSnapshot": baseSnapshot,
-			"targetSnapshot": targetSnapshot
+			snapshot1Path: baseSnapshot,
+			snapshot2Path: targetSnapshot
 		});
 		const config = {
 			method: 'post',
 			maxBodyLength: Infinity,
-			url: 'http://localhost:3000/compare-snapshots',
+			url: 'http://localhost:3000/analyse-metadata',
 			headers: {
 				'Content-Type': 'application/json'
 			},
 			data: data
 		};
 		const result = (await axios.request(config)).data.explanation;
-		// const result = 'Still trying';
 		setDiff(result);
 	}
-	const handleInput = (e: any) => {
-		console.log(e);
-		console.log(e.target.value);
+	const handleClear = (e: any) => {
+		setDiff('Cooking...');
 	}
 
 	return <>
 		<h1>Metadata comparator</h1>
-		<Button
+		{/* <Button
 			variant="contained"
 			component="label"
 		>
 			Upload files
 			<input onChange={handleInput} ref={ref} id='upload' type="file" multiple hidden />
-		</Button>
+		</Button> */}
 		<Grid2 container spacing={2} justifyContent={'center'}>
 			<Grid2 size={8}>
 				<FormControl fullWidth>
@@ -87,11 +85,12 @@ const MetadataComparator = (props: any) => {
 			</Grid2>
 		</Grid2>
 
-		<Grid2 padding='4'>
+		<Grid2 padding={2}>
 			<Button onClick={handleGetDiff}>Get Difference</Button>
+			<Button onClick={handleClear}>Clear</Button>
 		</Grid2>
 
-		<Container maxWidth='sm'>
+		<Container maxWidth='xl'>
 			<TextField
 				fullWidth
 				placeholder="Cooking some response..."

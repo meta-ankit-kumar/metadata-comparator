@@ -46,13 +46,14 @@ export async function gitDifferenceWithOpenAI(gitDifference: string, openaiApiKe
       1. Analyze the changes in the file structure and metadata.
       2. Summarize only the differences, describing what has changed and its potential impact on the Salesforce organization. Avoid adding extra explanations or unrelated details.
       3.Ensure that your response covers all the changes fully, even if the diff is large—do not truncate the output.
+      4. Ignore previous conversations to explain the difference
       Here is the Git diff: ${gitDifference}`;
 
     const data = {
         model: 'gpt-4o-mini',
         messages: [{ role: 'user', content: prompt }],
         max_tokens: 6000,
-        temperature: 0.7,
+        temperature: 0.3,
     };
 
     try {

@@ -13,7 +13,7 @@ app.use(cors())
 
 app.post('/compare-snapshots', async (req: Request, res: Response): Promise<any> => {
 	const { baseSnapshot, targetSnapshot } = req.body;
-	
+
 	if (!baseSnapshot || !targetSnapshot) {
 		return res.status(400).send({ error: 'Both baseSnapshot and targetSnapshot are required.' });
 	}
@@ -78,7 +78,10 @@ app.post('/analyse-metadata', async (req: Request, res: Response): Promise<any> 
 			} catch (error: any) {
 				if (error.code === 1) {
 					// Exit code 1 means differences were found
-					console.log('Differences found:');
+					// Exit code 1 means differences were found
+					console.log('******************* Start differences found: *******************');
+					console.log(error.stdout);
+					console.log('******************* End differences found: *******************');
 					return error.stdout; // Return the stdout which contains differences
 				} else {
 					// Log any other errors
